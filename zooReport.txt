@@ -1,0 +1,27 @@
+Zoo Management System: Design and Implementation Report
+
+
+Introduction
+This report discusses the design and implementation of a basic program to manage animals in a zoo. The program reads animal attributes from a file, creates respective objects for each animal, and writes the details of all animals of a specific species to a file.  
+
+
+Design Choices
+The program was designed using Object-Oriented Programming (OOP) as per the assignment requirements. OOP allows for the creation of objects that can contain both data and functions, which is ideal for representing real-world entities like animals in a zoo. The Animal class was created as a base class with common properties like name, age, and species. Four derived classes (Hyena, Tiger, Lion, and Bear) were created from the Animal base class, each with additional properties specific to each type of animal.  
+
+
+Data Structures and Algorithms
+Vectors were used to store animal names and animal objects. The choice of vectors was made because they provide the ability to easily add and remove elements from the end, which was useful for assigning unique names to the animal objects. A map was used to count the number of each species, with the species name as the key and the count as the value.  
+
+
+Code Explanation
+The program begins by reading animal names from a file and storing them in vectors for each animal species. The names are then shuffled to ensure randomness. Next, the program reads animal attributes from another file. For each line in the file, an animal object is created based on the species and added to the animals vector. The respective animal count in the speciesCount map is also incremented. Finally, the program writes the details of all animals of each species to a file.  
+
+
+Challenges and Solutions
+One of the main challenges faced during the development of this program was ensuring that loops performed correctly. Incorrect loop execution could break the entire program. To overcome this, extensive console printing was used for testing. This involved inserting about 100 lines of code for printing to the console, which was a difficult task as some parts of the code could break the entire program if not handled correctly.  
+
+
+
+
+Conclusion
+Through the development of this program, I have gained a deeper understanding of using vectors, maps, file I/O, and dynamic casting in C++. I was already familiar with OOP, so this project served as a good practice for applying OOP concepts. The program successfully manages a zoo's animal population, but there is always room for improvement and extension. For example, additional features could be added to manage zookeepers and habitats, or to track animal health and feeding schedules.
