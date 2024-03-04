@@ -8,6 +8,9 @@
 using namespace std;
 
 
+// Animal is the base class for all animals in the zoo.
+// It has common properties like name, age, and species.
+
 class Animal{
 private:
     string animalName;
@@ -47,6 +50,9 @@ public:
         this->animalSpecies = species;
     }
 };
+
+// Hyena, Tiger, Lion, and Bear are derived classes from Animal.
+// They have additional properties specific to each type of animal.
 
 class Hyena : public Animal{
 private:
@@ -265,18 +271,41 @@ public:
 };
 
 
+// This function writes the details of all animals of a specific species to a file.
+void printAnimalsToFile(const vector<Animal*>& animals, const string& species) {
+    ofstream reportFile("report.txt", ios_base::app); // Open the file in append mode
+
+    for (const auto &animal: animals) {
+        if (animal->getSpecies() == species) {
+            if (Hyena *hyena = dynamic_cast<Hyena *>(animal)) {
+                reportFile << "Hyena: " << hyena->getName() << ", " << hyena->getAge() << ", " << hyena->getSeasonBorn()
+                           << ", " << hyena->getGender() << ", " << hyena->getColor() << ", " << hyena->getWeight()
+                           << ", " << hyena->getOrigin() << "\n";
+            } else if (Tiger *tiger = dynamic_cast<Tiger *>(animal)) {
+                reportFile << "Tiger: " << tiger->getName() << ", " << tiger->getAge() << ", " << tiger->getSeasonBorn()
+                           << ", " << tiger->getGender() << ", " << tiger->getColor() << ", " << tiger->getWeight()
+                           << ", " << tiger->getOrigin() << "\n";
+            } else if (Lion *lion = dynamic_cast<Lion *>(animal)) {
+                reportFile << "Lion: " << lion->getName() << ", " << lion->getAge() << ", " << lion->getSeasonBorn()
+                           << ", " << lion->getGender() << ", " << lion->getColor() << ", " << lion->getWeight() << ", "
+                           << lion->getOrigin() << "\n";
+            } else if (Bear *bear = dynamic_cast<Bear *>(animal)) {
+                reportFile << "Bear: " << bear->getName() << ", " << bear->getAge() << ", " << bear->getSeasonBorn()
+                           << ", " << bear->getGender() << ", " << bear->getColor() << ", " << bear->getWeight() << ", "
+                           << bear->getOrigin() << "\n";
+            }
+        }
+    }
+
+    reportFile.close();
+}
+
 int main() {
+    // Open the file and read the animal attributes
     ifstream file("../arrivingAnimals.txt");
     vector<Animal*> animals;
     map<string, int> speciesCount;
     ifstream nameFile("../animalNames.txt");
-    // TODO: DEBUG AREA - REMOVE LATER
-    //
-    if (nameFile.is_open()) {
-        cout << "File is open" << endl;
-    }
-    //
-    // TODO: END DEBUG AREA
     string listLine;
     vector<string>* currentSpecies = nullptr;
     string line;
@@ -285,48 +314,24 @@ int main() {
     vector<string> tigerNames;
     vector<string> lionNames;
     vector<string> bearNames;
-    // TODO: DEBUG AREA - REMOVE LATER
-    //
-    cout << "Initial size of hyenaNames: " << hyenaNames.size() << endl;
-    cout << "Initial size of tigerNames: " << tigerNames.size() << endl;
-    cout << "Initial size of lionNames: " << lionNames.size() << endl;
-    cout << "Initial size of bearNames: " << bearNames.size() << endl;
-    //
-    // TODO: END DEBUG AREA
 
-    // Create a random number engine
+                                        // Create a random number engine
     random_device rd;                   // Seed for the random number engine
-    default_random_engine engine(rd()); // Use the random device to seed the engine
+    default_random_engine engine(rd()); // Use this random device to seed the engine used for randomness
 
-    // TODO: DEBUG AREA - REMOVE LATER
-    //
-    nameFile.clear();
-    nameFile.seekg(0, ios::beg);
-    //
-    // TODO: END DEBUG AREA
 
-    // read names from animalNames.txt and populate vector for each animal
+                                        // read names from animalNames.txt and populate vector for each animal
     while (getline(nameFile, listLine)) {
         if (listLine.empty() || listLine == " " || listLine == "\n" || listLine == "\r" || listLine == "\r\n") {
-            // TODO: DEBUG AREA - REMOVE LATER
-            //
-            cout << "Line is empty or space" << endl;
-            //
-            // TODO: END DEBUG AREA
             continue;                   // Skip blank lines and spaces
         }
-        // Trim trailing whitespace from the line
+                                        // Trim trailing whitespace from the line
         listLine.erase(find_if(listLine.rbegin(), listLine.rend(), [](unsigned char ch) {
             return !isspace(ch);
         }).base(), listLine.end());
 
         if (listLine.find("Names") != string::npos) {
-            // This line is a species name line
-            // TODO: DEBUG AREA - REMOVE LATER
-            //
-            cout << "Species line found" << endl;
-            //
-            // TODO: END DEBUG AREA
+                                        // This line is a species name line
             const string& species = listLine;
 
             if (species == "Hyena Names:") {
@@ -339,16 +344,11 @@ int main() {
                 currentSpecies = &bearNames;
             }
         } else if (currentSpecies) {
-            // This line is a names line
-            // TODO: DEBUG AREA - REMOVE LATER
-            //
-            cout << "Names line found" << endl;
-            //
-            // TODO: END DEBUG AREA
+                                            // This line holds the list of names for the current species
             istringstream ss(listLine);
             string listName;
 
-            // add to the current species vector
+                                            // add to the current species vector
             size_t pos = 0;
             std::string token;
             while ((pos = listLine.find(", ")) != std::string::npos) {
@@ -361,38 +361,14 @@ int main() {
 
         }
 
-    // TODO: DEBUG AREA - REMOVE LATER
-    //
-    cout << "Size of hyenaNames after population: " << hyenaNames.size() << endl;
-    cout << "Hyena Names: " << endl;
-    for(const auto& name : hyenaNames) {
-        cout << name << endl;
-    }
-    cout << "Size of tigerNames after population: " << tigerNames.size() << endl;
-    cout << "Tiger Names: " << endl;
-    for(const auto& name : tigerNames) {
-        cout << name << endl;
-    }
-    cout << "Size of lionNames after population: " << lionNames.size() << endl;
-    cout << "Lion Names: " << endl;
-    for(const auto& name : lionNames) {
-        cout << name << endl;
-    }
-    cout << "Size of bearNames after population: " << bearNames.size() << endl;
-    cout << "Bear Names: " << endl;
-    for(const auto& name : bearNames) {
-        cout << name << endl;
-    }
-    //
-    // TODO: END DEBUG AREA
 
-    // Randomize the order of the names
+                                                // Randomize the order of the names
     shuffle(hyenaNames.begin(), hyenaNames.end(), engine);
     shuffle(tigerNames.begin(), tigerNames.end(), engine);
     shuffle(lionNames.begin(), lionNames.end(), engine);
     shuffle(bearNames.begin(), bearNames.end(), engine);
 
-    nameFile.close();                   // Close the file after reading the names
+    nameFile.close();                           // Close the file after reading the names
 
 
     // read the animal attributes from arrivingAnimals.txt and create respective objects
@@ -400,56 +376,20 @@ int main() {
         istringstream ss(line);
         string age, gender, species, seasonBorn, color, weight, origin;
 
-        // read the first five words
+                                        // read the first five words
         for (int i = 0; i < 3; i++) {   // first three for age
             string word;
             getline(ss, word, ' ');
             age += word + " ";
         }
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Age: " << age << endl;
-        //
-        // TODO: END DEBUG AREA
         getline(ss, gender, ' ');       // next for gender
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Gender: " << gender << endl;
-        //
-        // TODO: END DEBUG AREA
         getline(ss, species, ',');      // last for species
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Species: " << species << endl;
-        //
-        // TODO: END DEBUG AREA
 
-
-        // read the rest of the attributes
+                                        // read the rest of the attributes
         getline(ss, seasonBorn, ',');
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Season Born: " << seasonBorn << endl;
-        //
-        // TODO: END DEBUG AREA
         getline(ss, color, ',');
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Color: " << color << endl;
-        //
-        // TODO: END DEBUG AREA
         getline(ss, weight, ',');
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Weight: " << weight << endl;
-        //
-        // TODO: END DEBUG AREA
         getline(ss, origin, ',');
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        cout << "Origin: " << origin << endl;
-        //
-        // TODO: END DEBUG AREA
 
         Animal* animal;
         if (species == "hyena") {
@@ -511,16 +451,14 @@ int main() {
 
         animals.push_back(animal);
 
-        // TODO: DEBUG AREA - REMOVE LATER
-        //
-        for (const auto &pair : speciesCount) {
-            cout << "Species " << pair.first << ": " << "Count " << pair.second << endl;
-        }
-        //
-        // TODO: END DEBUG AREA
     }
 
     file.close();
+
+    printAnimalsToFile(animals, "hyena");
+    printAnimalsToFile(animals, "tiger");
+    printAnimalsToFile(animals, "lion");
+    printAnimalsToFile(animals, "bear");
 
 }
 
